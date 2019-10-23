@@ -5,7 +5,7 @@ provider "google" {
 }
 
 
-resource "google_compute_address" "sonarqubeip" {
+resource "google_compute_address" "rabbitmqip" {
   name   = "${var.rabbitmq_instance_ip_name}"
   region = "${var.rabbitmq_instance_ip_region}"
 }
@@ -16,11 +16,11 @@ resource "google_compute_instance" "rabbitmq" {
   machine_type = "n1-standard-2"
   zone         = "us-east1-b"
 
-  tags = ["name", "rabbitmq", "http-server"]
+  tags = ["name", "rabbitmq", "http-server", "https-server"]
 
   boot_disk {
     initialize_params {
-      image = "debian-cloud/debian-9"
+      image = "centos-7-v20180129"
     }
   }
 
@@ -40,5 +40,5 @@ resource "google_compute_instance" "rabbitmq" {
     name = "rabbitmq"
   }
 
-  metadata_startup_script = "sudo apt-get update -y;sudo apt-get install git -y; sudo git clone https://github.com/Diksha86/rabbitmq.git; cd rabbitmq; sudo chmod 777 /rabbitmq/*; sudo sh rabbitmq.sh"
+  metadata_startup_script = "sudo yum update -y;sudo yum install git -y; sudo git clone https://github.com/Diksha86/rabbitmq.git; cd rabbitmq; sudo chmod 777 /rabbitmq/*; sudo sh rabbitmq.sh"
 }
